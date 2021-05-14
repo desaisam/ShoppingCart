@@ -1,0 +1,26 @@
+.ShoppingCart {
+    width: 40%;
+}
+
+.ShoppingCart-contents {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.ShoppingCart-item {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.ShoppingCart-contents table {
+    border: 1px solid black;
+}
+.ShoppingCart-contents table th {
+    font-weight: bold;
+    font-size: 9px;
+}
+.ShoppingCart-contents table td {
+    font-weight: bold;
+    font-size: 9px;
+}

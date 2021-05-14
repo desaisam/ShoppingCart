@@ -1,0 +1,17 @@
+.ProductList {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ProductList-product {
+    width: 400px;
+    max-width: 400px;
+    margin-top: 15px;
+}
+
+.ProductList-filter {
+    font-size: 9px;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./ProductList.css";
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";

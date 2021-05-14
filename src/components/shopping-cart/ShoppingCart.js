@@ -3,11 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from "react";
 
-export default function ShoppingCart({ cartItem, incrementQty, decrementQty }) {
-  console.log(`Props in Shopping ${JSON.stringify(cartItem)}`);
-  const [qty, setQty] = useState(0);
+export default function ShoppingCart({
+  cartItem,
+  incrementQty,
+  decrementQty,
+  addCoupon,
+  setCoupon,
+  coupon,
+  isSuccess,
+  deleteCoupon,
+  discount,
+  calculateDiscount,
+}) {
+  // eslint-disable-next-line
   const [price, setPrice] = useState(cartItem.price);
-
+  const [localCoupon, setLocalCoupon] = useState("");
   useEffect(() => {
     setPrice(cartItem.price);
   }, [cartItem]);
@@ -45,15 +55,33 @@ export default function ShoppingCart({ cartItem, incrementQty, decrementQty }) {
           <tbody>
             <tr>
               <td colSpan="2"></td>
+              <td>Discount: {discount} $</td>
+            </tr>
+            <tr>
+              <td colSpan="2"></td>
               <td>
-                Total: {cartItem.reduce((a, c) => a + c.price * c.count, 0)} $
+                Total:{" "}
+                {cartItem.reduce((a, c) => a + c.price * c.count, 0) - discount}{" "}
+                $
+              </td>
+            </tr>
+            <tr>
+              <td colSpan="1"></td>
+              <td>
+                {coupon}
+                {coupon !== "" && <button onClick={deleteCoupon}>x</button>}
               </td>
             </tr>
             <tr>
               <td colSpan="3">
                 <label htmlFor="coupon">Coupon</label>
-                <input id="coupon" type="text" defaultValue="" />
-                <button>Apply</button>
+                <input
+                  id="coupon"
+                  type="text"
+                  defaultValue=""
+                  onChange={(event) => setLocalCoupon(event.target.value)}
+                />
+                <button onClick={() => addCoupon(localCoupon)}>Apply</button>
               </td>
             </tr>
           </tbody>

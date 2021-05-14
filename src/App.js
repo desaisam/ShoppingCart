@@ -7,8 +7,44 @@ import ProductList from "./components/product-list/ProductList";
 export default function App() {
   const [cartItem, setCartItem] = useState([]);
   const [items, setItems] = useState(products);
-  const [sort, setSort] = useState("None");
-  const [filter, setFilter] = useState("None");
+  const [coupon, setCoupon] = useState("");
+  const [isSuccess, setSuccess] = useState(false);
+  const [discount, setDiscount] = useState(0);
+  const addCoupon = (value) => {
+    if (value === coupon) {
+      alert("Cannot apply same coupon again !");
+    } else {
+      if (value === "CHEAP-SAVER") {
+        setCoupon("CHEAP-SAVER");
+        setSuccess(true);
+        calculateDiscount(value);
+
+        alert("Coupon Sucessfully Applied");
+      } else if (value === "GAMER-10") {
+        setCoupon("GAMER-10");
+        alert("Coupon Sucessfully Applied");
+        setSuccess(true);
+        calculateDiscount(value);
+      } else if (value === "DAY-SAVER") {
+        setCoupon("DAY-SAVER");
+        setSuccess(true);
+        calculateDiscount(value);
+
+        alert("Coupon Sucessfully Applied");
+      } else {
+        setCoupon("");
+        setSuccess(false);
+
+        alert("Incorrect Coupon Entered ! Check again !");
+      }
+    }
+    console.log(`Coupon Sucessfully applied ${coupon}`);
+  };
+
+  const deleteCoupon = () => {
+    setCoupon("");
+    setDiscount(0);
+  };
   const addToCart = (prod) => {
     console.log(cartItem);
     const cartItems = cartItem.slice();
@@ -26,7 +62,6 @@ export default function App() {
     setCartItem(cartItems);
   };
   const sortProducts = (event) => {
-    setSort(event.target.value);
     if (event.target.value === "price") {
       const sorted = [...items].sort((a, b) => b.price - a.price);
       setItems(sorted);
@@ -44,6 +79,7 @@ export default function App() {
         if (a.name.toUpperCase() > b.name.toUpperCase()) {
           return 1;
         }
+        return 0;
       });
       setItems(sorted);
     }
@@ -51,10 +87,8 @@ export default function App() {
 
   const filterProducts = (event) => {
     if (event.target.value === "None") {
-      setFilter(event.target.value);
       setItems(products);
     } else {
-      setFilter(event.target.value);
       const filterdProds = products.filter(
         (product) => product.category === event.target.value
       );
@@ -76,6 +110,39 @@ export default function App() {
     let index = cartItems.findIndex((x) => x.id === prod.id);
     if (cartItems[index].count > 0) cartItems[index].count--;
     setCartItem(cartItems);
+  };
+
+  const calculateDiscount = (value) => {
+    if (value === "CHEAP-SAVER") {
+      const cheapSaverItems = cartItem
+        .slice()
+        .filter((a) => a.name.startsWith("Cheap"));
+      const maxItem = cheapSaverItems.reduce((p, c) =>
+        p.price > c.price ? p : c
+      );
+      let netDiscount = maxItem.price * maxItem.count * 0.2;
+      setDiscount(netDiscount);
+    }
+    if (value === "GAMER-10") {
+      const gameItems = cartItem
+        .slice()
+        .filter((a) => a.category.startsWith("Games"));
+      console.log(gameItems);
+      let totalPrice = gameItems.map((o) => o.price).reduce((a, c) => a + c, 0);
+      let totalQty = gameItems.reduce((a, b) => +a + +b.count, 0);
+      setDiscount(totalPrice * totalQty * 0.1);
+    }
+
+    if (value === "DAY-SAVER") {
+      let totalPrice = cartItem
+        .slice()
+        .map((o) => o.price)
+        .reduce((a, c) => a + c, 0);
+      var today = new Date();
+      var currentDate = String(today.getDate()).padStart(2, "0");
+      console.log(currentDate);
+      setDiscount(totalPrice * (currentDate / 10));
+    }
   };
   return (
     <div className="App">
@@ -116,6 +183,13 @@ export default function App() {
           cartItem={cartItem}
           incrementQty={incrementQty}
           decrementQty={decrementQty}
+          addCoupon={addCoupon}
+          setCoupon={setCoupon}
+          coupon={coupon}
+          isSuccess={isSuccess}
+          deleteCoupon={deleteCoupon}
+          discount={discount}
+          calculateDiscount={calculateDiscount}
         ></ShoppingCart>
       </div>
     </div>

@@ -1,3 +1,5 @@
+## Deployed App 
+https://frozen-oasis-40893.herokuapp.com/
 # getting setup
 
 ** make sure you have a modern version of node installed (I used v12.20.0)
